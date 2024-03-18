@@ -458,6 +458,8 @@ function mario:init(x, y, i, animation, size, t, properties)
 end
 
 function mario:update(dt)
+	self:tether(dt)
+
 	--RACCOON STUFF
 	if self.float and not self.raccoonfly then
 		if self.gravitydir == "up" then
@@ -7443,6 +7445,60 @@ function mario:emancipate(a)
 	end
 end
 
+function mario:tether(dt)
+	if self.tetherpartner == nil or self.dead or self.tetherpartner.dead then
+		self.tethered = false
+		return false
+	end
+
+	if (not self.controlsenabled) or self.vine or self.fence or self.tetherpartner==nil then
+		return false
+	end
+
+	self.tethered = true
+
+	--get tether angle
+	local dx = self.tetherpartner.x -self.x
+	local dy = self.y-self.tetherpartner.y
+
+	-- get springextention length
+	--local slacklength = 3.9
+	local slacklength = 3.8
+	local springstiffness = 20
+
+	local length = math.sqrt(dx*dx + dy*dy)-slacklength
+	self.tetherextension = length
+
+	if length <= slacklength then
+		return false
+	end
+	self.springstretched = true
+ 	local tetherangle = math.atan2(dy, dx)
+
+	-- calculate tether force
+	local tetherforce = length*springstiffness
+
+	-- calculate optimal damping for when a character is hanging by the spring. Consider calculating this outside the loop since it is a constant.
+	local mass = self.size
+	local damping = math.sqrt(4*mass*springstiffness)
+	damping = damping*0.25 --lower damping because optimal is boring
+	-- apply force
+
+	-- positive force y is updwards. Negate this later to apply to screen coordinates
+	local springforcex = math.cos(tetherangle)*tetherforce
+	local springforcey = math.sin(tetherangle)*tetherforce
+	local dampingforcex = -damping*self.speedx
+	local dampingforcey = damping*self.speedy
+	
+	local xadd = (springforcex + dampingforcex)*dt/mass
+	local yadd = -(springforcey + dampingforcey)*dt/mass --negate because of screen coordinates
+
+	--print("Player " .. self.playernumber .. "; " .. " size: " .. self.size .. "; position: (" .. self.x .. "," .. self.y .. "); angle: " .. tetherangle*180/math.pi .. "; springforce:(" .. springforcex .. "," .. springforcey .. ")" .. "; dampingforce: (" .. dampingforcex .. "," .. dampingforcey .. ")" .. "; speed: (" .. self.speedx .. "," .. self.speedy .. ")")
+
+	self.speedx = self.speedx + xadd
+	self.speedy = self.speedy + yadd
+end
+
 function mario:shootportal(i)
 	if (not self.controlsenabled) or self.vine or self.fence then
 		return false
@@ -8818,7 +8874,7 @@ function mario:respawn()
 	end
 	
 	self.speedy = 0
-	self.speedx = 0
+	-- self.speedx = 0
 	self.dead = false
 	self.size = 1
 	self.health = self.characterdata.health

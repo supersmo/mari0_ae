@@ -3335,6 +3335,16 @@ function drawplayer(i, x, y, r, pad, drop)
 			love.graphics.draw(v.graphic[k], v.quad, math.floor(((px-xscroll)*16+offsetX)*scale), math.floor(((py-yscroll)*16-offsetY)*scale), pr, dirscale, horscale, v.quadcenterX, v.quadcenterY)
 		end
 
+		--if tether
+		if v.tethered then
+			love.graphics.setColor(1,1,1)
+			local linewidth=4
+			if v.tetherextension > 0 then
+				linewidth = math.max(4 - 1*v.tetherextension,1)
+			end
+			love.graphics.setLineWidth(linewidth)
+			love.graphics.line(math.floor(((px-xscroll)*16+v.offsetX)*scale), math.floor(((py-yscroll)*16-v.offsetY)*scale), math.floor(((v.tetherpartner.x-xscroll)*16+v.tetherpartner.offsetX)*scale), math.floor(((v.tetherpartner.y-yscroll)*16-v.tetherpartner.offsetY)*scale))
+		end
 		if v.character and v.characterdata and v.characterdata.portalgununderhat then
 			if v.graphic[0] then
 				if drop then
@@ -4541,6 +4551,15 @@ function startlevel(level, reason)
 			objects["player"][i] = mario:new(startx + (i-1)*mul-6/16, starty-1, i, animation, mariosizes[i], playertype, marioproperties[i])
 		else
 			objects["player"][i] = mario:new(1.5 + (i-1)*mul-6/16+1.5, 13, i, animation, mariosizes[i], playertype, marioproperties[i])
+		end
+	end
+	
+	--if tether... set tether partner
+	for i = 1, players do
+		if i%2 == 1 and i < players then
+			objects["player"][i].tetherpartner = objects["player"][i+1]
+		else
+			objects["player"][i].tetherpartner = objects["player"][i-1]
 		end
 	end
 	
