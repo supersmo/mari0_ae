@@ -2972,6 +2972,7 @@ function disablecheats()
 	infinitetime = false
 	infinitelives = false
 	darkmode = false
+	tetheredplayers = 1
 end
 
 --sausage (don't ask)

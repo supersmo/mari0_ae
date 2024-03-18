@@ -458,7 +458,7 @@ function mario:init(x, y, i, animation, size, t, properties)
 end
 
 function mario:update(dt)
-	self:tether(dt)
+	self:applytether(dt)
 
 	--RACCOON STUFF
 	if self.float and not self.raccoonfly then
@@ -7445,8 +7445,8 @@ function mario:emancipate(a)
 	end
 end
 
-function mario:tether(dt)
-	if self.tetherpartner == nil or self.dead or self.tetherpartner.dead then
+function mario:applytether(dt)
+	if tetheredplayers < 2 or self.tetherpartner == nil or self.dead or self.tetherpartner.dead then
 		self.tethered = false
 		return false
 	end
@@ -7478,18 +7478,19 @@ function mario:tether(dt)
 	-- calculate tether force
 	local tetherforce = length*springstiffness
 
-	-- calculate optimal damping for when a character is hanging by the spring. Consider calculating this outside the loop since it is a constant.
+	-- calculate optimal damping for when a character is hanging by the spring.
 	local mass = self.size
 	local damping = math.sqrt(4*mass*springstiffness)
 	damping = damping*0.25 --lower damping because optimal is boring
-	-- apply force
-
+	
+	-- calculate forces
 	-- positive force y is updwards. Negate this later to apply to screen coordinates
 	local springforcex = math.cos(tetherangle)*tetherforce
 	local springforcey = math.sin(tetherangle)*tetherforce
 	local dampingforcex = -damping*self.speedx
 	local dampingforcey = damping*self.speedy
 	
+	-- apply forces
 	local xadd = (springforcex + dampingforcex)*dt/mass
 	local yadd = -(springforcey + dampingforcey)*dt/mass --negate because of screen coordinates
 
@@ -8874,7 +8875,7 @@ function mario:respawn()
 	end
 	
 	self.speedy = 0
-	-- self.speedx = 0
+	self.speedx = 0
 	self.dead = false
 	self.size = 1
 	self.health = self.characterdata.health

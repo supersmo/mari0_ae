@@ -761,6 +761,7 @@ gelcannondelay = 0.05
 gelcannonspeed = 30
 infinitetime = false
 infinitelives = false
+tetheredplayers = 1
 
 pausemenuoptions = {"resume", "suspend", "volume", "quit to", "quit to"}
 pausemenuoptions2 = {"", "", "", "menu", "desktop"}

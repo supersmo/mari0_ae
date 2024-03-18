@@ -3335,8 +3335,7 @@ function drawplayer(i, x, y, r, pad, drop)
 			love.graphics.draw(v.graphic[k], v.quad, math.floor(((px-xscroll)*16+offsetX)*scale), math.floor(((py-yscroll)*16-offsetY)*scale), pr, dirscale, horscale, v.quadcenterX, v.quadcenterY)
 		end
 
-		--if tether
-		if v.tethered then
+		if tetheredplayers > 1 and v.tethered then
 			love.graphics.setColor(1,1,1)
 			local linewidth=4
 			if v.tetherextension > 0 then
@@ -4555,11 +4554,14 @@ function startlevel(level, reason)
 	end
 	
 	--if tether... set tether partner
-	for i = 1, players do
-		if i%2 == 1 and i < players then
-			objects["player"][i].tetherpartner = objects["player"][i+1]
-		else
-			objects["player"][i].tetherpartner = objects["player"][i-1]
+	if tetheredplayers > 1 then
+		for i = 1, players do
+			if i%2 == 1 and i < players then
+				objects["player"][i].tetherpartner = objects["player"][i+1]
+			elseif i%2 == 0 then
+				objects["player"][i].tetherpartner = objects["player"][i-1]
+			end
+			--print("Player " .. i .. "is attached to Player " .. objects["player"][i].tetherpartner.playernumber)
 		end
 	end
 	

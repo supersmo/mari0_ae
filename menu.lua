@@ -1497,6 +1497,7 @@ function menu_draw()
 				posX = math.max(posX, 30+utf8.len(TEXT["playercollision:"])*8+longest)
 				posX = math.max(posX, 30+utf8.len(TEXT["infinite time:"])*8+longest)
 				posX = math.max(posX, 30+utf8.len(TEXT["infinite lives:"])*8+longest)
+				posX = math.max(posX, 30+utf8.len(TEXT["tethered players:"])*8+longest)
 			end
 			
 			properprintF(TEXT["mode:"], 30*scale, 65*scale)
@@ -1618,6 +1619,15 @@ function menu_draw()
 			else
 				properprintF(TEXT["off"], (posX-utf8.len(TEXT["off"])*8)*scale, 200*scale)
 			end
+
+			if optionsselection == 12 then
+				love.graphics.setColor(1, 1, 1, 1)
+			else
+				love.graphics.setColor(100/255, 100/255, 100/255, 1)
+			end
+
+			properprintF(TEXT["tethered players:"], 30*scale, 215*scale)	
+			properprintF(tostring(tetheredplayers), (posX-utf8.len(tostring(tetheredplayers))*8)*scale, 215*scale)
 		end
 	end
 	love.graphics.translate(0, yoffset*scale)
@@ -2457,7 +2467,7 @@ function menu_keypressed(key, unicode)
 					optionsselection = 1
 				end
 			elseif optionstab == 4 and gamefinished then
-				if optionsselection < 11 then
+				if optionsselection < 12 then
 					optionsselection = optionsselection + 1
 				else
 					optionsselection = 1
@@ -2487,7 +2497,7 @@ function menu_keypressed(key, unicode)
 				elseif optionstab == 3 then
 					optionsselection = 11
 				elseif optionstab == 4 and gamefinished then
-					optionsselection = 11
+					optionsselection = 12
 				end
 			end
 		elseif (key == "right" or key == "d") then
@@ -2621,6 +2631,11 @@ function menu_keypressed(key, unicode)
 					infinitelives = not infinitelives
 				elseif optionsselection == 11 then
 					darkmode = not darkmode
+				elseif optionsselection == 12 then
+					tetheredplayers = tetheredplayers+1
+					if tetheredplayers > LOCAL_PLAYERS then
+						tetheredplayers = LOCAL_PLAYERS
+					end
 				end
 			end				
 		elseif (key == "left" or key == "a") then
@@ -2753,6 +2768,11 @@ function menu_keypressed(key, unicode)
 					infinitelives = not infinitelives
 				elseif optionsselection == 11 then
 					darkmode = not darkmode
+				elseif optionsselection == 12 then
+					tetheredplayers = tetheredplayers-1
+					if tetheredplayers < 1 then
+						tetheredplayers = 1
+					end
 				end
 			end
 		elseif key == "m" then
