@@ -458,8 +458,6 @@ function mario:init(x, y, i, animation, size, t, properties)
 end
 
 function mario:update(dt)
-	self:applytether(dt)
-
 	--RACCOON STUFF
 	if self.float and not self.raccoonfly then
 		if self.gravitydir == "up" then
@@ -7443,61 +7441,6 @@ function mario:emancipate(a)
 	for i, v in pairs(delete) do
 		table.remove(portalprojectiles, v) --remove
 	end
-end
-
-function mario:applytether(dt)
-	if tetheredplayers < 2 or self.tetherpartner == nil or self.dead or self.tetherpartner.dead then
-		self.tethered = false
-		return false
-	end
-
-	if (not self.controlsenabled) or self.vine or self.fence or self.tetherpartner==nil then
-		return false
-	end
-
-	self.tethered = true
-
-	--get tether angle
-	local dx = self.tetherpartner.x -self.x
-	local dy = self.y-self.tetherpartner.y
-
-	-- get springextention length
-	--local slacklength = 3.9
-	local slacklength = 3.8
-	local springstiffness = 20
-
-	local length = math.sqrt(dx*dx + dy*dy)-slacklength
-	self.tetherextension = length
-
-	if length <= slacklength then
-		return false
-	end
-	self.springstretched = true
- 	local tetherangle = math.atan2(dy, dx)
-
-	-- calculate tether force
-	local tetherforce = length*springstiffness
-
-	-- calculate optimal damping for when a character is hanging by the spring.
-	local mass = self.size
-	local damping = math.sqrt(4*mass*springstiffness)
-	damping = damping*0.25 --lower damping because optimal is boring
-	
-	-- calculate forces
-	-- positive force y is updwards. Negate this later to apply to screen coordinates
-	local springforcex = math.cos(tetherangle)*tetherforce
-	local springforcey = math.sin(tetherangle)*tetherforce
-	local dampingforcex = -damping*self.speedx
-	local dampingforcey = damping*self.speedy
-	
-	-- apply forces
-	local xadd = (springforcex + dampingforcex)*dt/mass
-	local yadd = -(springforcey + dampingforcey)*dt/mass --negate because of screen coordinates
-
-	--print("Player " .. self.playernumber .. "; " .. " size: " .. self.size .. "; position: (" .. self.x .. "," .. self.y .. "); angle: " .. tetherangle*180/math.pi .. "; springforce:(" .. springforcex .. "," .. springforcey .. ")" .. "; dampingforce: (" .. dampingforcex .. "," .. dampingforcey .. ")" .. "; speed: (" .. self.speedx .. "," .. self.speedy .. ")")
-
-	self.speedx = self.speedx + xadd
-	self.speedy = self.speedy + yadd
 end
 
 function mario:shootportal(i)

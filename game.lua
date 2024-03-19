@@ -2958,6 +2958,11 @@ function game_draw()
 	if chatentrytoggle then
 		lobby_drawchat()
 	end
+
+	--tether
+	for j, w in pairs(objects["tether"]) do
+		w:draw()
+	end
 end
 
 function drawentity(j, w, i, v, currentscissor, drop)
@@ -3335,15 +3340,6 @@ function drawplayer(i, x, y, r, pad, drop)
 			love.graphics.draw(v.graphic[k], v.quad, math.floor(((px-xscroll)*16+offsetX)*scale), math.floor(((py-yscroll)*16-offsetY)*scale), pr, dirscale, horscale, v.quadcenterX, v.quadcenterY)
 		end
 
-		if tetheredplayers > 1 and v.tethered then
-			love.graphics.setColor(1,1,1)
-			local linewidth=4
-			if v.tetherextension > 0 then
-				linewidth = math.max(4 - 1*v.tetherextension,1)
-			end
-			love.graphics.setLineWidth(linewidth)
-			love.graphics.line(math.floor(((px-xscroll)*16+v.offsetX)*scale), math.floor(((py-yscroll)*16-v.offsetY)*scale), math.floor(((v.tetherpartner.x-xscroll)*16+v.tetherpartner.offsetX)*scale), math.floor(((v.tetherpartner.y-yscroll)*16-v.tetherpartner.offsetY)*scale))
-		end
 		if v.character and v.characterdata and v.characterdata.portalgununderhat then
 			if v.graphic[0] then
 				if drop then
@@ -4285,7 +4281,8 @@ function startlevel(level, reason)
 	objects["grinder"] = {}
 	
 	objects["cappy"] = {}
-	
+	objects["tether"] = {}
+
 	objects["screenboundary"] = {}
 	objects["screenboundary"]["left"] = screenboundary:new(0)
 	
@@ -4553,15 +4550,13 @@ function startlevel(level, reason)
 		end
 	end
 	
-	--if tether... set tether partner
+	-- attach tethers
 	if tetheredplayers > 1 then
 		for i = 1, players do
-			if i%2 == 1 and i < players then
-				objects["player"][i].tetherpartner = objects["player"][i+1]
-			elseif i%2 == 0 then
-				objects["player"][i].tetherpartner = objects["player"][i-1]
+			if i%tetheredplayers ~= 0 and i < players then
+				objects["tether"][i] = tether:new(objects["player"][i], objects["player"][i+1], 3.8)
+				print("Player " .. objects["tether"][i].p1.playernumber .. "is attached to Player " .. objects["tether"][i].p2.playernumber)
 			end
-			--print("Player " .. i .. "is attached to Player " .. objects["player"][i].tetherpartner.playernumber)
 		end
 	end
 	

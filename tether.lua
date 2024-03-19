@@ -1,0 +1,75 @@
+tether = class:new()
+
+function tether:init(p1, p2, slacklength)
+    self.p1 = p1
+    self.p2 = p2
+    self.slacklength = slacklength -- 3.8
+    self.springstiffness = 20
+	self.springlength = 0
+end
+
+function tether:update(dt)
+	if tetheredplayers < 2 or self.p1 == nil or self.p2 == nil or self.p1.dead or self.p2.dead then
+		self.tethered = false
+		return false
+	end
+	self.tethered = true
+	
+    -- get springextention length
+    local dx = self.p2.x-self.p1.x
+    local dy = self.p1.y-self.p2.y
+    local length = math.sqrt(dx*dx + dy*dy)-self.slacklength
+    self.springlength = length
+
+    if length <= self.slacklength then
+		return false
+	end
+    self.springstretched = true
+
+    --get angle from p1 to p2
+    local tetherangle = math.atan2(dy, dx)
+
+    self:updateplayer(self.p1, tetherangle, length, dt)
+    self:updateplayer(self.p2, tetherangle + math.pi, length, dt)
+end
+
+function tether:updateplayer(p, angle, length, dt)
+	if (not p.controlsenabled) or p.vine or p.fence then
+		return false
+	end
+
+	-- calculate optimal damping for when a character is hanging by the spring.
+	local mass = p.size
+	local damping = math.sqrt(4*mass*self.springstiffness)
+	damping = damping*0.25 --lower damping because optimal is boring
+	
+	-- calculate forces
+	-- positive force y is updwards. Negate this later to apply to screen coordinates
+    -- calculate tether force
+	local springforcemagnitude = length*self.springstiffness
+	local springforcex = math.cos(angle)*springforcemagnitude
+	local springforcey = math.sin(angle)*springforcemagnitude
+	local dampingforcex = -damping*p.speedx
+	local dampingforcey = damping*p.speedy
+	
+	-- apply forces
+	local xadd = (springforcex + dampingforcex)*dt/mass
+	local yadd = -(springforcey + dampingforcey)*dt/mass --negate because of screen coordinates
+
+	--print("p " .. self.playernumber .. "; " .. " size: " .. self.size .. "; position: (" .. self.x .. "," .. self.y .. "); angle: " .. tetherangle*180/math.pi .. "; springforce:(" .. springforcex .. "," .. springforcey .. ")" .. "; dampingforce: (" .. dampingforcex .. "," .. dampingforcey .. ")" .. "; speed: (" .. self.speedx .. "," .. self.speedy .. ")")
+
+	p.speedx = p.speedx + xadd
+	p.speedy = p.speedy + yadd
+end
+
+function tether:draw()
+	if  self.tethered then
+		love.graphics.setColor(1,1,1)
+		local linewidth=4
+		if self.springlength > 0 then
+			linewidth = math.max(4 - 1*self.springlength,1)
+		end
+		love.graphics.setLineWidth(linewidth)
+		love.graphics.line(math.floor(((self.p1.x-xscroll)*16+self.p1.offsetX)*scale), math.floor(((self.p1.y-yscroll)*16-self.p1.offsetY)*scale), math.floor(((self.p2.x-xscroll)*16+self.p2.offsetX)*scale), math.floor(((self.p2.y-yscroll)*16-self.p2.offsetY)*scale))
+	end
+end
