@@ -1538,7 +1538,7 @@ function defaultconfig()
 	-- joy, #, but, #
 	-- You cannot set Hats and Axes as the jump button. Bummer.
 	
-	mouseowner = 1
+	mouseowner = 0
 	
 	controls = {}
 	
@@ -1559,21 +1559,21 @@ function defaultconfig()
 	controls[i]["use"] = {"e"}
 	controls[i]["pause"] = {""}
 	
-	for i = 2, LOCAL_PLAYERS do
+	for i = 1, LOCAL_PLAYERS do
 		controls[i] = {}
-		controls[i]["right"] = {"joy", i-1, "hat", 1, "r"}
-		controls[i]["left"] = {"joy", i-1, "hat", 1, "l"}
-		controls[i]["down"] = {"joy", i-1, "hat", 1, "d"}
-		controls[i]["up"] = {"joy", i-1, "hat", 1, "u"}
-		controls[i]["run"] = {"joy", i-1, "but", 3}
-		controls[i]["jump"] = {"joy", i-1, "but", 1}
-		controls[i]["aimx"] = {"joy", i-1, "axe", 5, "neg"}
-		controls[i]["aimy"] = {"joy", i-1, "axe", 4, "neg"}
-		controls[i]["portal1"] = {"joy", i-1, "but", 5}
-		controls[i]["portal2"] = {"joy", i-1, "but", 6}
-		controls[i]["reload"] = {"joy", i-1, "but", 4}
-		controls[i]["use"] = {"joy", i-1, "but", 2}
-		controls[i]["pause"] = {""}
+		controls[i]["right"] = {"joy", i, "hat", 1, "r"}
+		controls[i]["left"] = {"joy", i, "hat", 1, "l"}
+		controls[i]["down"] = {"joy", i, "hat", 1, "d"}
+		controls[i]["up"] = {"joy", i, "hat", 1, "u"}
+		controls[i]["run"] = {"joy", i, "but", 3}
+		controls[i]["jump"] = {"joy", i, "but", 1}
+		controls[i]["aimx"] = {"joy", i, "axe", 3, "pos"}
+		controls[i]["aimy"] = {"joy", i, "axe", 4, "pos"}
+		controls[i]["portal1"] = {"joy", i, "but", 5}
+		controls[i]["portal2"] = {"joy", i, "but", 6}
+		controls[i]["reload"] = {"joy", i, "but", 4}
+		controls[i]["use"] = {"joy", i, "but", 2}
+		controls[i]["pause"] = {"joy", i, "but", 8}
 	end
 	-------------------
 	-- PORTAL COLORS --
