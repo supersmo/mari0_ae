@@ -1486,6 +1486,7 @@ function menu_draw()
 			end
 
 			local posX = 180
+			local posXcol2 = 360
 			if currentLanguage ~= "english" then
 				local longest = math.max(utf8.len(TEXT["off"]),utf8.len(TEXT["on"]))*8
 				posX = math.max(posX, 30+utf8.len(TEXT["mode:"])*8+longest)
@@ -1497,7 +1498,9 @@ function menu_draw()
 				posX = math.max(posX, 30+utf8.len(TEXT["playercollision:"])*8+longest)
 				posX = math.max(posX, 30+utf8.len(TEXT["infinite time:"])*8+longest)
 				posX = math.max(posX, 30+utf8.len(TEXT["infinite lives:"])*8+longest)
-				posX = math.max(posX, 30+utf8.len(TEXT["tethered players:"])*8+longest)
+
+				posXcol2 = math.max(posXcol2, posX+30+utf8.len(TEXT["tethered players:"])*8+longest)
+				posXcol2 = math.max(posXcol2, posX+30+utf8.len(TEXT["offscreen death:"])*8+longest)
 			end
 			
 			properprintF(TEXT["mode:"], 30*scale, 65*scale)
@@ -1625,9 +1628,19 @@ function menu_draw()
 			else
 				love.graphics.setColor(100/255, 100/255, 100/255, 1)
 			end
-
-			properprintF(TEXT["tethered players:"], 30*scale, 215*scale)	
-			properprintF(tostring(tetheredplayers), (posX-utf8.len(tostring(tetheredplayers))*8)*scale, 215*scale)
+			properprintF(TEXT["tethered players:"], (posX+30)*scale, 65*scale)
+			properprintF(tostring(tetheredplayers), (posXcol2-utf8.len(tostring(tetheredplayers))*8)*scale, 65*scale)
+			if optionsselection == 13 then
+				love.graphics.setColor(1, 1, 1, 1)
+			else
+				love.graphics.setColor(100/255, 100/255, 100/255, 1)
+			end
+			properprintF(TEXT["offscreen death:"], (posX+30)*scale, 80*scale)
+			if offscreendeath then
+				properprintF(TEXT["on"], (posXcol2-utf8.len(TEXT["on"])*8)*scale, 80*scale)
+			else
+				properprintF(TEXT["off"], (posXcol2-utf8.len(TEXT["off"])*8)*scale, 80*scale)
+			end
 		end
 	end
 	love.graphics.translate(0, yoffset*scale)
@@ -2371,6 +2384,7 @@ function menu_keypressed(key, unicode)
 			gamestate = "menu"
 		end
 	elseif gamestate == "options" then
+		local optionsintab4 = 13
 		if optionsselection == 1 then
 			if (key == "left" or key == "a") then
 				if optionstab > 1 then
@@ -2467,7 +2481,7 @@ function menu_keypressed(key, unicode)
 					optionsselection = 1
 				end
 			elseif optionstab == 4 and gamefinished then
-				if optionsselection < 12 then
+				if optionsselection < optionsintab4 then
 					optionsselection = optionsselection + 1
 				else
 					optionsselection = 1
@@ -2497,7 +2511,7 @@ function menu_keypressed(key, unicode)
 				elseif optionstab == 3 then
 					optionsselection = 11
 				elseif optionstab == 4 and gamefinished then
-					optionsselection = 12
+					optionsselection = optionsintab4
 				end
 			end
 		elseif (key == "right" or key == "d") then
@@ -2636,6 +2650,8 @@ function menu_keypressed(key, unicode)
 					if tetheredplayers > LOCAL_PLAYERS then
 						tetheredplayers = LOCAL_PLAYERS
 					end
+				elseif optionsselection == 13 then
+					offscreendeath = not offscreendeath
 				end
 			end				
 		elseif (key == "left" or key == "a") then
@@ -2773,6 +2789,8 @@ function menu_keypressed(key, unicode)
 					if tetheredplayers < 1 then
 						tetheredplayers = 1
 					end
+				elseif optionsselection == 13 then
+					offscreendeath = not offscreendeath
 				end
 			end
 		elseif key == "m" then

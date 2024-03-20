@@ -2645,10 +2645,21 @@ function game_draw()
 						
 						drawplayer(i, (playerx/16)+xscroll-(6/16), (playery/16)+yscroll)
 						
+						--kill player if it has been off screen for more than 5 seconds
+						if offscreendeath and v.offscreentimestamp then
+							if os.clock() - v.offscreentimestamp > 5 then
+								v:die("pit")
+							end
+						else
+							v.offscreentimestamp = os.clock()
+						end
+						
 						love.graphics.setStencilTest()
 						
 						love.graphics.setColor(v.colors[1] or {1, 1, 1})
 						love.graphics.draw(markoverlayimg, math.floor(x*16*scale), math.floor(y*16*scale), r, scale, scale, 0, 15)
+					elseif offscreendeath then
+						v.offscreentimestamp = false
 					end
 				end
 				love.graphics.setScissor()
