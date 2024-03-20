@@ -1500,6 +1500,7 @@ function menu_draw()
 				posX = math.max(posX, 30+utf8.len(TEXT["infinite lives:"])*8+longest)
 
 				posXcol2 = math.max(posXcol2, posX+30+utf8.len(TEXT["tethered players:"])*8+longest)
+				posXcol2 = math.max(posXcol2, posX+30+utf8.len(TEXT["tethered death:"])*8+longest)
 				posXcol2 = math.max(posXcol2, posX+30+utf8.len(TEXT["offscreen death:"])*8+longest)
 			end
 			
@@ -1635,11 +1636,22 @@ function menu_draw()
 			else
 				love.graphics.setColor(100/255, 100/255, 100/255, 1)
 			end
-			properprintF(TEXT["offscreen death:"], (posX+30)*scale, 80*scale)
-			if offscreendeath then
+			properprintF(TEXT["tethered death:"], (posX+30)*scale, 80*scale)
+			if tethereddeath then
 				properprintF(TEXT["on"], (posXcol2-utf8.len(TEXT["on"])*8)*scale, 80*scale)
 			else
 				properprintF(TEXT["off"], (posXcol2-utf8.len(TEXT["off"])*8)*scale, 80*scale)
+			end
+			if optionsselection == 14 then
+				love.graphics.setColor(1, 1, 1, 1)
+			else
+				love.graphics.setColor(100/255, 100/255, 100/255, 1)
+			end
+			properprintF(TEXT["offscreen death:"], (posX+30)*scale, 95*scale)
+			if offscreendeath then
+				properprintF(TEXT["on"], (posXcol2-utf8.len(TEXT["on"])*8)*scale, 95*scale)
+			else
+				properprintF(TEXT["off"], (posXcol2-utf8.len(TEXT["off"])*8)*scale, 95*scale)
 			end
 		end
 	end
@@ -2384,7 +2396,7 @@ function menu_keypressed(key, unicode)
 			gamestate = "menu"
 		end
 	elseif gamestate == "options" then
-		local optionsintab4 = 13
+		local optionsintab4 = 14
 		if optionsselection == 1 then
 			if (key == "left" or key == "a") then
 				if optionstab > 1 then
@@ -2651,6 +2663,8 @@ function menu_keypressed(key, unicode)
 						tetheredplayers = LOCAL_PLAYERS
 					end
 				elseif optionsselection == 13 then
+					tethereddeath = not tethereddeath
+				elseif optionsselection == 14 then
 					offscreendeath = not offscreendeath
 				end
 			end				
@@ -2790,6 +2804,8 @@ function menu_keypressed(key, unicode)
 						tetheredplayers = 1
 					end
 				elseif optionsselection == 13 then
+					tethereddeath = not tethereddeath
+				elseif optionsselection == 14 then
 					offscreendeath = not offscreendeath
 				end
 			end

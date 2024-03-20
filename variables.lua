@@ -762,6 +762,7 @@ gelcannonspeed = 30
 infinitetime = false
 infinitelives = false
 tetheredplayers = 1
+tethereddeath = false
 offscreendeath = false
 
 pausemenuoptions = {"resume", "suspend", "volume", "quit to", "quit to"}

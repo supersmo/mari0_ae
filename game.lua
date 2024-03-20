@@ -2648,7 +2648,7 @@ function game_draw()
 						--kill player if it has been off screen for more than 5 seconds
 						if offscreendeath and v.offscreentimestamp then
 							if os.clock() - v.offscreentimestamp > 5 then
-								v:die("pit")
+								v:die("lava")
 							end
 						else
 							v.offscreentimestamp = os.clock()
@@ -4566,7 +4566,6 @@ function startlevel(level, reason)
 		for i = 1, players do
 			if i%tetheredplayers ~= 0 and i < players then
 				objects["tether"][i] = tether:new(objects["player"][i], objects["player"][i+1], 3.8)
-				print("Player " .. objects["tether"][i].p1.playernumber .. "is attached to Player " .. objects["tether"][i].p2.playernumber)
 			end
 		end
 	end

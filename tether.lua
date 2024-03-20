@@ -9,6 +9,15 @@ function tether:init(p1, p2, slacklength)
 end
 
 function tether:update(dt)
+	-- apply teathered death.
+	if tethereddeath and tetheredplayers > 1 and not everyonedead then
+		if self.p1.dead and not self.p2.dead then
+			self.p2:die("lava")
+		elseif self.p2.dead and not self.p1.dead then
+			self.p1:die("lava")
+		end
+	end
+
 	if tetheredplayers < 2 or self.p1 == nil or self.p2 == nil or self.p1.dead or self.p2.dead then
 		self.tethered = false
 		return false
