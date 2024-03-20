@@ -42,7 +42,7 @@ function tether:updateplayer(p, angle, length, dt)
 	local mass = p.size
 	local damping = math.sqrt(4*mass*self.springstiffness)
 	damping = damping*0.25 --lower damping because optimal is boring
-	
+
 	-- calculate forces
 	-- positive force y is updwards. Negate this later to apply to screen coordinates
     -- calculate tether force
