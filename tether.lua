@@ -1,9 +1,11 @@
 tether = class:new()
 
-function tether:init(p1, p2)
+function tether:init(p1, p2, tethernumber)
     self.p1 = p1
     self.p2 = p2
 	self.springlength = 0
+	local numberoftethers = math.ceil(players/tetheredplayers)
+	self.color = ((tethernumber-1)/(numberoftethers-1))*0.5+0.5 -- shades of grey. 50% white to 100% white 
 end
 
 function tether:update(dt)
@@ -72,7 +74,7 @@ end
 
 function tether:draw()
 	if  self.tethered then
-		love.graphics.setColor(1,1,1)
+		love.graphics.setColor(self.color, self.color, self.color)
 		local linewidth=4
 		if self.springlength > 0 then
 			linewidth = math.max(4 - 1*self.springlength,1)
