@@ -71,6 +71,8 @@
 		"infinite lives:": "infinite lives:",
 		"dark mode:": "dark mode:",
 		"tethered players:": "tethered players:",
+		"tether length:": "tether length",
+		"tether stiffness:": "tether stiffness",
 		"offscreen death:": "offscreen death:",
 		"tethered death:": "tethered death:",
 		"on": "on",

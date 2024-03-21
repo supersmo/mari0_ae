@@ -1500,6 +1500,8 @@ function menu_draw()
 				posX = math.max(posX, 30+utf8.len(TEXT["infinite lives:"])*8+longest)
 
 				posXcol2 = math.max(posXcol2, posX+30+utf8.len(TEXT["tethered players:"])*8+longest)
+				posXcol2 = math.max(posXcol2, posX+30+utf8.len(TEXT["tether length:"])*8+longest)
+				posXcol2 = math.max(posXcol2, posX+30+utf8.len(TEXT["tether stiffness:"])*8+longest)
 				posXcol2 = math.max(posXcol2, posX+30+utf8.len(TEXT["tethered death:"])*8+longest)
 				posXcol2 = math.max(posXcol2, posX+30+utf8.len(TEXT["offscreen death:"])*8+longest)
 			end
@@ -1636,22 +1638,36 @@ function menu_draw()
 			else
 				love.graphics.setColor(100/255, 100/255, 100/255, 1)
 			end
-			properprintF(TEXT["tethered death:"], (posX+30)*scale, 80*scale)
-			if tethereddeath then
-				properprintF(TEXT["on"], (posXcol2-utf8.len(TEXT["on"])*8)*scale, 80*scale)
-			else
-				properprintF(TEXT["off"], (posXcol2-utf8.len(TEXT["off"])*8)*scale, 80*scale)
-			end
+			properprintF(TEXT["tether length:"], (posX+30)*scale, 80*scale)
+			properprintF(tostring(tetherlength), (posXcol2-utf8.len(tostring(tetherlength))*8)*scale, 80*scale)
 			if optionsselection == 14 then
 				love.graphics.setColor(1, 1, 1, 1)
 			else
 				love.graphics.setColor(100/255, 100/255, 100/255, 1)
 			end
-			properprintF(TEXT["offscreen death:"], (posX+30)*scale, 95*scale)
-			if offscreendeath then
-				properprintF(TEXT["on"], (posXcol2-utf8.len(TEXT["on"])*8)*scale, 95*scale)
+			properprintF(TEXT["tether stiffness:"], (posX+30)*scale, 95*scale)
+			properprintF(tostring(tetherstiffness), (posXcol2-utf8.len(tostring(tetherstiffness))*8)*scale, 95*scale)
+			if optionsselection == 15 then
+				love.graphics.setColor(1, 1, 1, 1)
 			else
-				properprintF(TEXT["off"], (posXcol2-utf8.len(TEXT["off"])*8)*scale, 95*scale)
+				love.graphics.setColor(100/255, 100/255, 100/255, 1)
+			end
+			properprintF(TEXT["tethered death:"], (posX+30)*scale, 110*scale)
+			if tethereddeath then
+				properprintF(TEXT["on"], (posXcol2-utf8.len(TEXT["on"])*8)*scale, 110*scale)
+			else
+				properprintF(TEXT["off"], (posXcol2-utf8.len(TEXT["off"])*8)*scale, 110*scale)
+			end
+			if optionsselection == 16 then
+				love.graphics.setColor(1, 1, 1, 1)
+			else
+				love.graphics.setColor(100/255, 100/255, 100/255, 1)
+			end
+			properprintF(TEXT["offscreen death:"], (posX+30)*scale, 125*scale)
+			if offscreendeath then
+				properprintF(TEXT["on"], (posXcol2-utf8.len(TEXT["on"])*8)*scale, 125*scale)
+			else
+				properprintF(TEXT["off"], (posXcol2-utf8.len(TEXT["off"])*8)*scale, 125*scale)
 			end
 		end
 	end
@@ -2396,7 +2412,7 @@ function menu_keypressed(key, unicode)
 			gamestate = "menu"
 		end
 	elseif gamestate == "options" then
-		local optionsintab4 = 14
+		local optionsintab4 = 16
 		if optionsselection == 1 then
 			if (key == "left" or key == "a") then
 				if optionstab > 1 then
@@ -2663,8 +2679,15 @@ function menu_keypressed(key, unicode)
 						tetheredplayers = LOCAL_PLAYERS
 					end
 				elseif optionsselection == 13 then
-					tethereddeath = not tethereddeath
+					tetherlength = tetherlength+0.5
+					-- if tetherlength > 4 then
+					-- 	tetherlength = 4
+					-- end
 				elseif optionsselection == 14 then
+					tetherstiffness = tetherstiffness+10
+				elseif optionsselection == 15 then
+					tethereddeath = not tethereddeath
+				elseif optionsselection == 16 then
 					offscreendeath = not offscreendeath
 				end
 			end				
@@ -2804,8 +2827,18 @@ function menu_keypressed(key, unicode)
 						tetheredplayers = 1
 					end
 				elseif optionsselection == 13 then
-					tethereddeath = not tethereddeath
+					tetherlength = tetherlength-0.5
+					if tetherlength < 0.5 then
+						tetherlength = 0
+					end
 				elseif optionsselection == 14 then
+					tetherstiffness = tetherstiffness-10
+					if tetherstiffness < 0 then
+						tetherstiffness = 0
+					end
+				elseif optionsselection == 15 then
+					tethereddeath = not tethereddeath
+				elseif optionsselection == 16 then
 					offscreendeath = not offscreendeath
 				end
 			end

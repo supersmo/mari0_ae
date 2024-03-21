@@ -1,10 +1,8 @@
 tether = class:new()
 
-function tether:init(p1, p2, slacklength)
+function tether:init(p1, p2)
     self.p1 = p1
     self.p2 = p2
-    self.slacklength = slacklength -- 3.8
-    self.springstiffness = 20
 	self.springlength = 0
 end
 
@@ -27,10 +25,10 @@ function tether:update(dt)
     -- get springextention length
     local dx = self.p2.x-self.p1.x
     local dy = self.p1.y-self.p2.y
-    local length = math.sqrt(dx*dx + dy*dy)-self.slacklength
+    local length = math.max(0, math.sqrt(dx*dx + dy*dy)-tetherlength)
     self.springlength = length
 
-    if length <= self.slacklength then
+    if length <= 0 then
 		return false
 	end
     self.springstretched = true
@@ -49,13 +47,14 @@ function tether:updateplayer(p, angle, length, dt)
 
 	-- calculate optimal damping for when a character is hanging by the spring.
 	local mass = p.size
-	local damping = math.sqrt(4*mass*self.springstiffness)
-	damping = damping*0.25 --lower damping because optimal is boring
+	local damping = math.sqrt(4*mass*tetherstiffness)
+	--damping = damping*0.25 --lower damping because optimal is boring
+	damping = damping*0.05 --lower damping because optimal is boring
 
 	-- calculate forces
 	-- positive force y is updwards. Negate this later to apply to screen coordinates
     -- calculate tether force
-	local springforcemagnitude = length*self.springstiffness
+	local springforcemagnitude = length*tetherstiffness
 	local springforcex = math.cos(angle)*springforcemagnitude
 	local springforcey = math.sin(angle)*springforcemagnitude
 	local dampingforcex = -damping*p.speedx
@@ -65,7 +64,7 @@ function tether:updateplayer(p, angle, length, dt)
 	local xadd = (springforcex + dampingforcex)*dt/mass
 	local yadd = -(springforcey + dampingforcey)*dt/mass --negate because of screen coordinates
 
-	--print("p " .. self.playernumber .. "; " .. " size: " .. self.size .. "; position: (" .. self.x .. "," .. self.y .. "); angle: " .. tetherangle*180/math.pi .. "; springforce:(" .. springforcex .. "," .. springforcey .. ")" .. "; dampingforce: (" .. dampingforcex .. "," .. dampingforcey .. ")" .. "; speed: (" .. self.speedx .. "," .. self.speedy .. ")")
+	--print("p " .. p.playernumber .. "; " .. " size: " .. p.size .. "; position: (" .. p.x .. "," .. p.y .. "); angle: " .. angle*180/math.pi .. "; stretch: ".. length .. "springforce:(" .. springforcex .. "," .. springforcey .. ")" .. "; dampingforce: (" .. dampingforcex .. "," .. dampingforcey .. ")" .. "; speed: (" .. p.speedx .. "," .. p.speedy .. ")")
 
 	p.speedx = p.speedx + xadd
 	p.speedy = p.speedy + yadd

@@ -4565,7 +4565,7 @@ function startlevel(level, reason)
 	if tetheredplayers > 1 then
 		for i = 1, players do
 			if i%tetheredplayers ~= 0 and i < players then
-				objects["tether"][i] = tether:new(objects["player"][i], objects["player"][i+1], 3.8)
+				objects["tether"][i] = tether:new(objects["player"][i], objects["player"][i+1])
 			end
 		end
 	end

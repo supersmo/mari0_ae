@@ -762,6 +762,10 @@ gelcannonspeed = 30
 infinitetime = false
 infinitelives = false
 tetheredplayers = 1
+tetherlength = 5.5
+tetherstiffness = 30
+--tetherlength 8
+--tetherstiffness = 500
 tethereddeath = false
 offscreendeath = false
 
