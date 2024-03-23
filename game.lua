@@ -4563,11 +4563,11 @@ function startlevel(level, reason)
 	
 	-- attach tethers
 	if tetheredplayers > 1 then
-		local tethernumber = 1
+		local tethergroup = 1
 		for i = 1, players do
 			if i%tetheredplayers ~= 0 and i < players then
-				objects["tether"][tethernumber] = tether:new(objects["player"][i], objects["player"][i+1], tethernumber)
-				tethernumber = tethernumber +1
+				objects["tether"][i] = tether:new(objects["player"][i], objects["player"][i+1], tethergroup)
+				tethergroup = tethergroup+1
 			end
 		end
 	end
