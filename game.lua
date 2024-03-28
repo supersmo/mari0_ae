@@ -2301,6 +2301,11 @@ function game_draw()
 			w:draw()
 		end
 		
+		--tethers
+		for j, w in pairs(objects["tether"]) do
+			w:draw()
+		end
+
 		--draw collision (debug)
 		if HITBOXDEBUG and (editormode or testlevel) then
 			local lw = love.graphics.getLineWidth()
@@ -2968,11 +2973,6 @@ function game_draw()
 	--chat
 	if chatentrytoggle then
 		lobby_drawchat()
-	end
-
-	--tether
-	for j, w in pairs(objects["tether"]) do
-		w:draw()
 	end
 end
 
@@ -4567,6 +4567,7 @@ function startlevel(level, reason)
 		for i = 1, players do
 			if i%tetheredplayers ~= 0 and i < players then
 				objects["tether"][i] = tether:new(objects["player"][i], objects["player"][i+1], tethergroup)
+			else
 				tethergroup = tethergroup+1
 			end
 		end
