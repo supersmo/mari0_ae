@@ -4561,81 +4561,27 @@ function startlevel(level, reason)
 		end
 	end
 	
-	-- todo: attach as bicycle wheel = to circle + hub and spoke
-	-- todo: refactor to groups into chunks and pass to functions based on "constants"
-	-- todo: refactor to static class
-	-- todo: refactor to line or circle to line + attach first and last
-	-- todo: randomize group order
-	-- todo: make repelling springs
-	-- todo: Magnets??
-	-- springs that snap?
-	-- springs that attach?
-	-- springs that can retract/extend? shoulder buttons?
-	-- todo: tether
-
-	
-	-- attach tethers in a line or circle
-	-- if tetheredplayers > 1 then
-	-- 	local tethergroup = 1
-	-- 	local firtsplayeringroup = 1
-	-- 	for i = 1, players do
-
-	-- 		if i %tetheredplayers == 1 then
-	-- 			firtsplayeringroup = i
-	-- 		end
-	-- 		if i%tetheredplayers ~= 0 and i < players then
-	-- 			objects["tether"][i] = tether:new(objects["player"][i], objects["player"][i+1], tethergroup)
-	-- 		elseif i ~= firtsplayeringroup then
-	-- 			-- close circle
-	-- 			objects["tether"][i] = tether:new(objects["player"][i], objects["player"][firtsplayeringroup], tethergroup)
-
-	-- 			tethergroup = tethergroup+1
-	-- 		end
-	-- 	end
-	-- end
-   
-	-- -- attach tethers between everyone in a group
-	-- if tetheredplayers > 1 then
-	-- 	local tethergroup = 1
-
-	-- 	local tetherid = 1
-	-- 	for i = 1, players do
-
-	-- 		local tethergroups = math.ceil(players/tetheredplayers)
-	-- 		local lastplayeringroup = math.min((tethergroup-1)*tetheredplayers + tetheredplayers, players)
-	-- 		for j = i +1, lastplayeringroup do
-	-- 			objects["tether"][tetherid] = tether:new(objects["player"][i], objects["player"][j], tethergroup)
-	-- 			tetherid = tetherid+1
-	-- 		end
-	-- 		if (i%tetheredplayers == 0) then
-	-- 			tethergroup = tethergroup+1
-	-- 			print("incremented tethergroup: ".. tethergroup)
-	-- 		end
-	-- 	end
-	-- end
-	
--- -- attach tethers in hub and spoke
+	--create tethers
 	if tetheredplayers > 1 then
-		local tethergroup = 1
-		local firtsplayeringroup = 1
-		local tetherid = 1
-		for i = 1, players do
-			local tethergroups = math.ceil(players/tetheredplayers)
-			if i %tetheredplayers == 1 then
-				firtsplayeringroup = i
+		-- divide players into groups
+		local group = {}
+		local groupcount = math.ceil(players/tetheredplayers)
+		-- remove last group if there is only 1 player in it
+		if tetheredplayers%groupcount == 1 then
+			groupcount = groupcount -1
+		end
+		
+		local playerlist = objects["player"]
+		for i=1, groupcount do
+			for j=1, tetheredplayers do
+				group[j] = playerlist[(i-1)*tetheredplayers+j]
 			end
-			local lastplayeringroup = math.min((tethergroup-1)*tetheredplayers + tetheredplayers, players)
 
-			if i == firtsplayeringroup then
-				for j = i +1, lastplayeringroup do
-					objects["tether"][tetherid] = tether:new(objects["player"][i], objects["player"][j], tethergroup)
-					tetherid = tetherid+1
-				end
+			local color = {1, 1, 1, 1}
+			if groupcount > 1 then
+				color = getrainbowcolor(i/groupcount)
 			end
-			if (i%tetheredplayers == 0) then
-				tethergroup = tethergroup+1
-				print("incremented tethergroup: ".. tethergroup)
-			end
+			TetherFormation.createtetherformation(group, TetherFormation.ALL_TO_ALL, color)
 		end
 	end
 
@@ -9470,4 +9416,16 @@ function dchighscore()
 		local s = tostring(DCcompleted) .. "~" .. datet[1] .. "/" .. datet[2] .. "/" .. datet[3]
 		love.filesystem.write("alesans_entities/dc.txt", s)
 	end
+end
+function dump(o)
+   if type(o) == 'table' then
+      local s = '{ '
+      for k,v in pairs(o) do
+         if type(k) ~= 'number' then k = '"'..k..'"' end
+         s = s .. '['..k..'] = ' .. dump(v) .. ','
+      end
+      return s .. '} '
+   else
+      return tostring(o)
+   end
 end

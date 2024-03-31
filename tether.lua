@@ -1,15 +1,11 @@
 tether = class:new()
 
-function tether:init(p1, p2, tethergroup)
+function tether:init(p1, p2, color)
     self.p1 = p1
     self.p2 = p2
 	self.springlength = 0
-	local numberoftethergroups = math.ceil(players/tetheredplayers)
-	self.color = {1, 1, 1, 1}
-	if numberoftethergroups > 1 then
-		self.color = getrainbowcolor(tethergroup/numberoftethergroups)
-	end
-	print("tethergroup: ".. tethergroup .. " numberoftethergroups: " .. numberoftethergroups .. " color: " .. tostring(self.color), " p1: " .. self.p1.playernumber.. " p2: " .. self.p2.playernumber)
+	self.color = color
+	print("color: " .. tostring(self.color), " p1: " .. self.p1.playernumber.. " p2: " .. self.p2.playernumber)
 end
 
 function tether:update(dt)
