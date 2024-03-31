@@ -4561,18 +4561,84 @@ function startlevel(level, reason)
 		end
 	end
 	
-	-- attach tethers
+	-- todo: attach as bicycle wheel = to circle + hub and spoke
+	-- todo: refactor to groups into chunks and pass to functions based on "constants"
+	-- todo: refactor to static class
+	-- todo: refactor to line or circle to line + attach first and last
+	-- todo: randomize group order
+	-- todo: make repelling springs
+	-- todo: Magnets??
+	-- springs that snap?
+	-- springs that attach?
+	-- springs that can retract/extend? shoulder buttons?
+	-- todo: tether
+
+	
+	-- attach tethers in a line or circle
+	-- if tetheredplayers > 1 then
+	-- 	local tethergroup = 1
+	-- 	local firtsplayeringroup = 1
+	-- 	for i = 1, players do
+
+	-- 		if i %tetheredplayers == 1 then
+	-- 			firtsplayeringroup = i
+	-- 		end
+	-- 		if i%tetheredplayers ~= 0 and i < players then
+	-- 			objects["tether"][i] = tether:new(objects["player"][i], objects["player"][i+1], tethergroup)
+	-- 		elseif i ~= firtsplayeringroup then
+	-- 			-- close circle
+	-- 			objects["tether"][i] = tether:new(objects["player"][i], objects["player"][firtsplayeringroup], tethergroup)
+
+	-- 			tethergroup = tethergroup+1
+	-- 		end
+	-- 	end
+	-- end
+   
+	-- -- attach tethers between everyone in a group
+	-- if tetheredplayers > 1 then
+	-- 	local tethergroup = 1
+
+	-- 	local tetherid = 1
+	-- 	for i = 1, players do
+
+	-- 		local tethergroups = math.ceil(players/tetheredplayers)
+	-- 		local lastplayeringroup = math.min((tethergroup-1)*tetheredplayers + tetheredplayers, players)
+	-- 		for j = i +1, lastplayeringroup do
+	-- 			objects["tether"][tetherid] = tether:new(objects["player"][i], objects["player"][j], tethergroup)
+	-- 			tetherid = tetherid+1
+	-- 		end
+	-- 		if (i%tetheredplayers == 0) then
+	-- 			tethergroup = tethergroup+1
+	-- 			print("incremented tethergroup: ".. tethergroup)
+	-- 		end
+	-- 	end
+	-- end
+	
+-- -- attach tethers in hub and spoke
 	if tetheredplayers > 1 then
 		local tethergroup = 1
+		local firtsplayeringroup = 1
+		local tetherid = 1
 		for i = 1, players do
-			if i%tetheredplayers ~= 0 and i < players then
-				objects["tether"][i] = tether:new(objects["player"][i], objects["player"][i+1], tethergroup)
-			else
+			local tethergroups = math.ceil(players/tetheredplayers)
+			if i %tetheredplayers == 1 then
+				firtsplayeringroup = i
+			end
+			local lastplayeringroup = math.min((tethergroup-1)*tetheredplayers + tetheredplayers, players)
+
+			if i == firtsplayeringroup then
+				for j = i +1, lastplayeringroup do
+					objects["tether"][tetherid] = tether:new(objects["player"][i], objects["player"][j], tethergroup)
+					tetherid = tetherid+1
+				end
+			end
+			if (i%tetheredplayers == 0) then
 				tethergroup = tethergroup+1
+				print("incremented tethergroup: ".. tethergroup)
 			end
 		end
 	end
-	
+
 	if player_position and player_position[1] then
 		--test from position
 		objects["player"][1].x = player_position[1]

@@ -9,7 +9,7 @@ function tether:init(p1, p2, tethergroup)
 	if numberoftethergroups > 1 then
 		self.color = getrainbowcolor(tethergroup/numberoftethergroups)
 	end
-	print("tethergroup: ".. tethergroup .. " numberoftethergroups: " .. numberoftethergroups .. " color" .. tostring(self.color))
+	print("tethergroup: ".. tethergroup .. " numberoftethergroups: " .. numberoftethergroups .. " color: " .. tostring(self.color), " p1: " .. self.p1.playernumber.. " p2: " .. self.p2.playernumber)
 end
 
 function tether:update(dt)
