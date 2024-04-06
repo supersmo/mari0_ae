@@ -4577,11 +4577,12 @@ function startlevel(level, reason)
 				group[j] = playerlist[(i-1)*tetheredplayers+j]
 			end
 
+			shuffle(group)
 			local color = {1, 1, 1, 1}
 			if groupcount > 1 then
 				color = getrainbowcolor(i/groupcount)
 			end
-			TetherFormation.createtetherformation(group, TetherFormation.ALL_TO_ALL, color)
+			TetherFormation.createtetherformation(group, TetherFormation.LINE, color)
 		end
 	end
 

@@ -92,3 +92,11 @@ function dump(o)
        return tostring(o)
     end
  end
+
+ -- shuffles a table. Taken from https://gist.github.com/Uradamus/10323382
+ function shuffle(tbl)
+    for i = #tbl, 2, -1 do
+        local j = math.random(i)
+        tbl[i], tbl[j] = tbl[j], tbl[i]
+    end
+end

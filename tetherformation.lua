@@ -84,34 +84,8 @@ function TetherFormation.createtetherformation(group, formation, color)
 	end
 end
 
-    -- todo: attach as bicycle wheel = to circle + hub and spoke
-	-- todo: refactor to groups into chunks and pass to functions based on "constants"
-	-- todo: refactor to static class
-	-- todo: refactor to line or circle to line + attach first and last
-	-- todo: randomize group order
 	-- todo: make repelling springs
 	-- todo: Magnets??
 	-- springs that snap?
 	-- springs that attach?
-	-- springs that can retract/extend? shoulder buttons?
-	-- todo: tether
-
-	-- -- attach tethers between everyone in a group
-	-- if tetheredplayers > 1 then
-	-- 	local tethergroup = 1
-
-	-- 	local tetherid = 1
-	-- 	for i = 1, players do
-
-	-- 		local tethergroups = math.ceil(players/tetheredplayers)
-	-- 		local lastplayeringroup = math.min((tethergroup-1)*tetheredplayers + tetheredplayers, players)
-	-- 		for j = i +1, lastplayeringroup do
-	-- 			objects["tether"][tetherid] = tether:new(objects["player"][i], objects["player"][j], tethergroup)
-	-- 			tetherid = tetherid+1
-	-- 		end
-	-- 		if (i%tetheredplayers == 0) then
-	-- 			tethergroup = tethergroup+1
-	-- 			print("incremented tethergroup: ".. tethergroup)
-	-- 		end
-	-- 	end
-	-- end
+	-- Extend/retract springs without shoulder buttons?
