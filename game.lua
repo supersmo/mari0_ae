@@ -3937,6 +3937,21 @@ function drawmultiHUD()
 			end
 		end
 	end
+
+	if players > 1 and tetheredplayers > 1 then
+		-- tether length
+		textscale = 0.5
+		local s = "Spring length: " .. tetherlength
+		local x = width*16-(string.len(s)*8+8)*textscale
+		local y = 40
+		properprintfunc(s, x*scale, y*scale, textscale)
+
+		-- spring strength
+		s = "Spring stiffness: " .. tetherstiffness
+		x = width*16-(string.len(s)*8+8)*textscale
+		y = y+10*textscale
+		properprintfunc(s, x*scale, y*scale, textscale)
+	end
 end
 
 function updatesplitscreen()
@@ -5419,6 +5434,27 @@ function game_keypressed(key, textinput)
 	
 	if editormode then
 		editor_keypressed(key)
+	end
+
+	if players > 1 and tetheredplayers > 1 then
+		if key == "1" then
+			tetherlength = tetherlength-0.25
+			if tetherlength < 0 then
+				tetherlength = 0
+			end
+		end
+		if key == "2" then
+			tetherlength = tetherlength+0.25
+		end
+		if key == "3" then
+			tetherstiffness = tetherstiffness-5
+			if tetherstiffness < 0 then
+				tetherstiffness = 0
+			end
+		end
+		if key == "4" then
+			tetherstiffness = tetherstiffness+5
+		end
 	end
 end
 

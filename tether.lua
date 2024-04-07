@@ -3,7 +3,7 @@ tether = class:new()
 function tether:init(p1, p2, color)
     self.p1 = p1
     self.p2 = p2
-	self.springlength = 0
+	self.springextension = 0  -- How far the spring is currently stretched or compressed.
 	self.color = color
 	print("color: " .. tostring(self.color), " p1: " .. self.p1.playernumber.. " p2: " .. self.p2.playernumber)
 end
@@ -28,7 +28,7 @@ function tether:update(dt)
     local dx = self.p2.x-self.p1.x
     local dy = self.p1.y-self.p2.y
     local length = math.max(0, math.sqrt(dx*dx + dy*dy)-tetherlength)
-    self.springlength = length
+    self.springextension = length
 
     if length <= 0 then
 		return false
@@ -50,7 +50,6 @@ function tether:updateplayer(p, angle, length, dt)
 	-- calculate optimal damping for when a character is hanging by the spring.
 	local mass = p.size
 	local damping = math.sqrt(4*mass*tetherstiffness)
-	--damping = damping*0.25 --lower damping because optimal is boring
 	damping = damping*0.05 --lower damping because optimal is boring
 
 	-- calculate forces
@@ -76,8 +75,8 @@ function tether:draw()
 	if  self.tethered then
 		love.graphics.setColor(self.color)
 		local linewidth=4
-		if self.springlength > 0 then
-			linewidth = math.max(4 - 1*self.springlength,1)
+		if self.springextension > 0 then
+			linewidth = math.max(4 - 1*self.springextension,1)
 		end
 		love.graphics.setLineWidth(linewidth)
 		love.graphics.line(math.floor(((self.p1.x-xscroll)*16+self.p1.offsetX)*scale), math.floor(((self.p1.y-yscroll)*16-self.p1.offsetY)*scale), math.floor(((self.p2.x-xscroll)*16+self.p2.offsetX)*scale), math.floor(((self.p2.y-yscroll)*16-self.p2.offsetY)*scale))

@@ -2825,7 +2825,7 @@ function menu_keypressed(key, unicode)
 					end
 				elseif optionsselection == 13 then
 					tetherlength = tetherlength-0.5
-					if tetherlength < 0.5 then
+					if tetherlength < 0 then
 						tetherlength = 0
 					end
 				elseif optionsselection == 14 then
