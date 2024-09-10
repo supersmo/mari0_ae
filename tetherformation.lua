@@ -86,6 +86,5 @@ end
 
 	-- todo: make repelling springs
 	-- todo: Magnets??
-	-- springs that snap?
 	-- springs that attach?
-	-- Extend/retract springs without shoulder buttons?
+	-- Extend/retract springs with shoulder buttons?

@@ -1895,7 +1895,12 @@ function game_draw()
 				love.graphics.draw(peachimg, math.floor((mapwidth-7-xscroll)*16*scale), (11.0625-yscroll)*16*scale, 0, scale, scale)
 			end
 		end
-		
+
+		-- tethers
+		for j, w in pairs(objects["tether"]) do
+			w:draw()
+		end
+
 		love.graphics.setColor(1, 1, 1)
 		--levelfinish text and toad
 		if levelfinished and levelfinishtype == "castle" then
@@ -1931,7 +1936,7 @@ function game_draw()
 				love.graphics.draw(peachimg, math.floor((mapwidth-7-xscroll)*16*scale), (11.0625-yscroll)*16*scale, 0, scale, scale)
 			end
 		end
-		
+
 		love.graphics.setColor(1, 1, 1)
 		--Fireworks
 		for j, w in pairs(fireworks) do
@@ -2300,11 +2305,7 @@ function game_draw()
 		for j, w in pairs(objects["cappy"]) do
 			w:draw()
 		end
-		
-		--tethers
-		for j, w in pairs(objects["tether"]) do
-			w:draw()
-		end
+
 
 		--draw collision (debug)
 		if HITBOXDEBUG and (editormode or testlevel) then

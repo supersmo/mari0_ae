@@ -761,7 +761,7 @@ gelcannondelay = 0.05
 gelcannonspeed = 30
 infinitetime = false
 infinitelives = false
-tetheredplayers = 1
+tetheredplayers = 2
 tetherlength = 5.5
 tetherstiffness = 30
 --tetherlength 8
