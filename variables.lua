@@ -755,19 +755,21 @@ portalknockback = false
 bigmario = false
 goombaattack = false
 sonicrainboom = false
-playercollisions = false
+playercollisions = true
 scalefactor = 5
 gelcannondelay = 0.05
 gelcannonspeed = 30
-infinitetime = false
-infinitelives = false
-tetheredplayers = 2
+infinitetime = true
+infinitelives = true
+tetheredplayers = 8
 tetherlength = 5.5
 tetherstiffness = 30
+tetherdampingcoefficient = 0.02
 --tetherlength 8
 --tetherstiffness = 500
 tethereddeath = false
-offscreendeath = false
+offscreendeath = true
+tetherenabled = true
 
 pausemenuoptions = {"resume", "suspend", "volume", "quit to", "quit to"}
 pausemenuoptions2 = {"", "", "", "menu", "desktop"}

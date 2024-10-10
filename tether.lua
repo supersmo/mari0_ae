@@ -18,6 +18,10 @@ function tether:update(dt)
 		end
 	end
 
+	if tetherenabled == false then
+		self.tethered = false
+		return false
+	end
 	if tetheredplayers < 2 or self.p1 == nil or self.p2 == nil or self.p1.dead or self.p2.dead then
 		self.tethered = false
 		return false
@@ -50,7 +54,7 @@ function tether:updateplayer(p, angle, length, dt)
 	-- calculate optimal damping for when a character is hanging by the spring.
 	local mass = p.size
 	local damping = math.sqrt(4*mass*tetherstiffness)
-	damping = damping*0.05 --lower damping because optimal is boring
+	damping = damping*tetherdampingcoefficient --lower damping because optimal is boring
 
 	-- calculate forces
 	-- positive force y is updwards. Negate this later to apply to screen coordinates

@@ -3952,6 +3952,12 @@ function drawmultiHUD()
 		x = width*16-(string.len(s)*8+8)*textscale
 		y = y+10*textscale
 		properprintfunc(s, x*scale, y*scale, textscale)
+
+		-- dampingcoefficient
+		s = "Damping coefficient: " .. tetherdampingcoefficient
+		x = width*16-(string.len(s)*8+8)*textscale
+		y = y+10*textscale
+		properprintfunc(s, x*scale, y*scale, textscale)
 	end
 end
 
@@ -4579,6 +4585,7 @@ function startlevel(level, reason)
 	
 	--create tethers
 	if tetheredplayers > 1 then
+		tetherenabled = true
 		-- divide players into groups
 		local group = {}
 		local groupcount = math.ceil(players/tetheredplayers)
@@ -5455,6 +5462,29 @@ function game_keypressed(key, textinput)
 		end
 		if key == "4" then
 			tetherstiffness = tetherstiffness+5
+		end
+		if key == "5" then
+			tetherdampingcoefficient = tetherdampingcoefficient-0.01
+		end
+
+		if key == "6" then
+			tetherdampingcoefficient = tetherdampingcoefficient+0.01
+		end
+
+		-- 2 players high up make 1 player almost float
+		if key == "7" then
+			tetherlength = 5.5
+			tetherstiffness = 30
+			tetherdampingcoefficient = 0.02
+		end
+		-- 2 players high up saves 1 player Just able to get 2 stories high while 1 on the ground
+		if key == "8" then
+			tetherlength = 8.5
+			tetherstiffness = 140
+			tetherdampingcoefficient = 0.05
+		end
+		if key == " " then
+			tetherenabled =  not tetherenabled
 		end
 	end
 end

@@ -318,7 +318,7 @@ function love.load()
 	http.TIMEOUT = 7
 	
 	graphicspack = "SMB" --SMB, ALLSTARS
-	playertypei = 1
+	playertypei = 5
 	playertype = playertypelist[playertypei] --portal, minecraft
 	
 	if volume == 0 then
